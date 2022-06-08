@@ -1,0 +1,45 @@
+server:
+  port: 8000
+
+
+eureka:
+  client:
+    register-with-eureka: true  # Eureka에 등록
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+
+spring:
+  application:
+    name: apigateway-service
+  cloud:
+    gateway:
+      default-filters:
+        - name: GlobalFilter
+          args:
+            baseMessage: Spring Cloud Gateway Global Filter
+            preLogger: true
+            postLogger: true
+      routes:
+        - id: first-service
+          uri: lb://MY-FIRST-SERVICE # http://localhost:8081/
+          predicates:
+            - Path=/first-service/**
+          filters:
+#            - AddRequestHeader=first-request, first-request-header2
+#            - AddResponseHeader=first-response, first-response-header2
+            - CustomFilter
+        - id: second-service
+          uri: lb://MY-SECOND-SERVICE # http://localhost:8082/
+          predicates:
+            - Path=/second-service/**
+          filters:
+#            - AddRequestHeader=second-request, second-request-header2
+#            - AddResponseHeader=second-response, second-response-header2
+            - name: CustomFilter
+            - name: LoggingFilter
+              args:
+                baseMessage: Hi, Logging there.
+                preLogger: true
+                postLogger: true
+# predicates는 조건절이다. 즉, uri 뒤에 predicates가 그대로 붙어 호출된다.
