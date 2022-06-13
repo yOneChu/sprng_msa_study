@@ -3,7 +3,7 @@ server:
 
 spring:
   application:
-    name: catalog-service
+    name: order-service
   datasource:
     url: jdbc:postgresql://localhost:5432/myapp
     username: postgres
@@ -11,7 +11,7 @@ spring:
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
     properties:
       hibernate:
         show_sql: true
@@ -28,7 +28,7 @@ eureka:
 
 logging:
   level:
-    com.example.catalogservice: DEBUG
+    com.example.orderservice: DEBUG
 
 
 #  datasource:
