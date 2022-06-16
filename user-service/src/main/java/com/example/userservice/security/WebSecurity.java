@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -22,7 +23,7 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
     private final Environment env;
 
     //권한 관련 부분분
-   @Override
+    @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable();
         //http.authorizeRequests().antMatchers("/users/**").permitAll();
@@ -30,13 +31,13 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
                 .hasIpAddress("150.73.18.58") //
                 .and()
                 .addFilter(getAuthenticationFilter()); // 해당 필더로 검사
-
         //http.headers().frameOptions().disable();
     }
 
     private AuthenticationFilter getAuthenticationFilter() throws Exception {
-        AuthenticationFilter authenticationFilter = new AuthenticationFilter();
-        authenticationFilter.setAuthenticationManager(authenticationManager());
+        AuthenticationFilter authenticationFilter =
+                new AuthenticationFilter(authenticationManager(), userService, env);
+        //authenticationFilter.setAuthenticationManager(authenticationManager());
 
         return authenticationFilter;
     }
@@ -44,9 +45,14 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
 
     //인증 관련 부분
     // select pwd from users where email = ?
-
     @Override
     protected AuthenticationManager authenticationManager() throws Exception {
         return super.authenticationManager();
+    }
+
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+       // 인증
+       auth.userDetailsService(userService).passwordEncoder(bCryptPasswordEncoder);
     }
 }
