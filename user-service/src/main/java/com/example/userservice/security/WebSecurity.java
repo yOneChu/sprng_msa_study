@@ -45,14 +45,14 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
 
     //인증 관련 부분
     // select pwd from users where email = ?
-    @Override
+/*    @Override
     protected AuthenticationManager authenticationManager() throws Exception {
         return super.authenticationManager();
-    }
+    }*/
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-       // 인증
+       // 인증 - 사용자가 입력한 pwd를 encrypted 하는거다. 그래야 저장된 encrypted 패스워드와 비교할 수 있다.
        auth.userDetailsService(userService).passwordEncoder(bCryptPasswordEncoder);
     }
 }

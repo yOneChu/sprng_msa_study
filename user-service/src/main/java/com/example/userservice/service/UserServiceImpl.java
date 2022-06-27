@@ -89,4 +89,5 @@ public class UserServiceImpl implements UserService {
         UserDto userDto = new ModelMapper().map(userEntity, UserDto.class);
         return userDto;
     }
+
 }
