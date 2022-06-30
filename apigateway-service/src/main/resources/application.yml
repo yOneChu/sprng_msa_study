@@ -49,6 +49,7 @@ spring:
           filters:
             - RemoveRequestHeader=Cookie
             - RewritePath=/user-service/(?<segment>.*), /$\{segment}
+            - AuthorizationHeaderFilter
         - id: catalog-service
           uri: lb://CATALOG-SERVICE
           predicates:
@@ -79,3 +80,6 @@ spring:
                 preLogger: true
                 postLogger: true
 # predicates는 조건절이다. 즉, uri 뒤에 predicates가 그대로 붙어 호출된다.
+
+token:
+  secret: user_token

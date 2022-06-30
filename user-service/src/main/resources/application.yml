@@ -32,7 +32,7 @@ eureka:
 
 
 greeting:
-  message: Welcome to the simple E-Commerce.
+  message: Welcome to the simple User-Service.
 
 token:
   expiration_time: 86400000 # one day token
